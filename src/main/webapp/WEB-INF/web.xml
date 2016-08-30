@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<javaee:display-name>log analysort</javaee:display-name>
+	<javaee:description>web Application</javaee:description>
+	<listener>
+		<listener-class>com.road.yishi.log.monitor.MonitorLogContextListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>logAnalyseConfig</param-name>
+		<!-- <param-value>C:/Users/bingting.peng/Desktop/tkc/日志处理/202/07-19/</param-value> -->
+		<param-value>E:/_work_space/Prism/src/main/resources/META-INF/config.properties</param-value>
+	</context-param>
+
+	<welcome-file-list>
+		<welcome-file>logMonitor.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>

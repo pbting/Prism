@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topicHandlers>
+	<!-- <mapper  class="com.road.yishi.log.analysor.AnalilizelogCatalinaMapper" fileName="{1}catalina.out" topic="catalinaOut" />
+	<reducer class="com.road.yishi.log.analysor.AnalilizelogCatalinaReducer" topic="catalinaOut"/>
+	
+	<mapper  class="com.road.yishi.log.analysor.AnalilizeLogWebServerMapper" fileName="{1}error.log" topic="webServer" />
+	<reducer class="com.road.yishi.log.analysor.AnalilizeLogWebServerReducer" topic="webServer"/> -->
+	
+	<mapper  class="com.road.yishi.log.analysor.AnalylizLogLocalMapper" fileName="{0}error.log" topic="castleError" />
+	<reducer class="com.road.yishi.log.analysor.AnalylizLogLocalReducer" topic="castleError"/>
+</topicHandlers>
