@@ -13,6 +13,12 @@ import com.road.yishi.log.mgr.TopicHandlerMappingMgr;
 import com.road.yishi.log.servlet.service.ConsumerLogFactory;
 import com.road.yishi.log.vo.LogKeyInfo;
 
+/**
+ * 
+ * <pre>
+ * 	数据shuffle进行reducer,讲结果进行输出
+ * </pre>
+ */
 public class AnalilizeLogWebServerReducer implements Reducer<LogMetaInfo, List<LogDetailInfo>> {
 
 	@Override

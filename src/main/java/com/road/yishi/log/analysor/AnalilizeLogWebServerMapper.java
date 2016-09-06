@@ -9,6 +9,17 @@ import com.road.yishi.log.core.LogMetaFactory;
 import com.road.yishi.log.core.LogMetaInfo;
 import com.road.yishi.log.handler.TopicMap;
 
+/**
+ * 
+ * <pre>
+ * 	通常需要经过以下几个阶段：
+ * 	1、数据输入与切分
+ *  2、mapper 行数据mapper 处理
+ *  3、单个mapper 任务的combiner
+ *  4、将mapper 任务输出的结果指定到哪一个reducer task 处理
+ *  
+ * </pre>
+ */
 public class AnalilizeLogWebServerMapper extends TopicMap<LogMetaInfo, LogDetailInfo> {
 
 	private StringBuffer logContent = new StringBuffer();
@@ -65,7 +76,7 @@ public class AnalilizeLogWebServerMapper extends TopicMap<LogMetaInfo, LogDetail
 		}
 		
 		if(!isRepeat){
-			logContext.get(logMetaInfo).add(logDetailInfo);
+			logContext.get(logMetaInfo).add(logDetailInfo);//单个mapper 任务 下的combiner,多个map task 之间的类combiner 操作是Partitioner
 		}
 	}
 }
