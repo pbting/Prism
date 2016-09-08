@@ -10,9 +10,11 @@ import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 public class MinaClient {
-
+	
+	public static NioSocketConnector connector ;
+	
 	public static void main(String[] args) {
-		NioSocketConnector connector = new NioSocketConnector();
+		connector = new NioSocketConnector();
 		connector.setConnectTimeoutMillis(1000*60);
 		connector.setHandler(new ClientHandler());
 		connector.getFilterChain().addLast("codec", new ProtocolCodecFilter(new ObjectCodecFactory()));

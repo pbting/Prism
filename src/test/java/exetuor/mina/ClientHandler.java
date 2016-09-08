@@ -11,7 +11,11 @@ public class ClientHandler extends IoHandlerAdapter {
 	public void messageReceived(IoSession session, Object message) throws Exception {
 		int c = count.getAndIncrement();
 		if(c>300){
-			session.closeOnFlush();
+			System.out.println(c+"---end-----");
+			session.closeOnFlush();//(true);
+			session.getService().dispose();
+			MinaClient.connector.dispose(false);
+			return ;
 		}
 		ObjectMessage objectMessage = (ObjectMessage) message;
 		Person person = KryoSerializeUtil.derializable(objectMessage.getBody(), Person.class);
@@ -26,5 +30,9 @@ public class ClientHandler extends IoHandlerAdapter {
 	@Override
 	public void exceptionCaught(IoSession session, Throwable cause) throws Exception {
 		super.exceptionCaught(session, cause);
+	}
+	@Override
+	public void sessionClosed(IoSession session) throws Exception {
+		super.sessionClosed(session);
 	}
 }
