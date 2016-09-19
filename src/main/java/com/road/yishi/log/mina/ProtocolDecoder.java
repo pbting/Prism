@@ -1,4 +1,4 @@
-package exetuor.mina;
+package com.road.yishi.log.mina;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
@@ -20,7 +20,7 @@ public class ProtocolDecoder extends CumulativeProtocolDecoder {
 	@Override
 	protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
 		//至少需要有8个字节的包头
-		if(in.remaining()<ObjectMessage.HEAD_LENGTH){
+		if(in.remaining()<KryoMessage.HEAD_LENGTH){
 			return false;
 		}
 		
@@ -29,14 +29,14 @@ public class ProtocolDecoder extends CumulativeProtocolDecoder {
 		int length = in.getInt();
 		
 		//回溯buffer 的possition
-		in.position(in.position()-8);
+		in.position(in.position() - 8);
 		
-		if(ObjectMessage.HEAD_FLAG!=headFlag){
+		if(KryoMessage.HEAD_FLAG!=headFlag){
 			System.err.println("数据包头不匹配："+Integer.toHexString(headFlag));
 			return false;
 		}
 		
-		if(length < ObjectMessage.HEAD_LENGTH){
+		if(length < KryoMessage.HEAD_LENGTH){
 			System.err.println("数据包长度不匹配："+length);
 			return false;
 		}
@@ -49,13 +49,13 @@ public class ProtocolDecoder extends CumulativeProtocolDecoder {
 		
 		in.get(data, 0, length);//处理有粘包的情况
 		
-		ObjectMessage message = new ObjectMessage();
+		KryoMessage message = new KryoMessage();
 		//读取head info
-		IoBuffer headerBuf = IoBuffer.wrap(data, 0, ObjectMessage.HEAD_LENGTH);
+		IoBuffer headerBuf = IoBuffer.wrap(data, 0, KryoMessage.HEAD_LENGTH);
 		message.readHeader(headerBuf);
-		int bodyLength = length-ObjectMessage.HEAD_LENGTH;
+		int bodyLength = length-KryoMessage.HEAD_LENGTH;
 		byte[] bytes = new byte[bodyLength];
-		System.arraycopy(data, ObjectMessage.HEAD_LENGTH, bytes, 0, bodyLength);
+		System.arraycopy(data, KryoMessage.HEAD_LENGTH, bytes, 0, bodyLength);
 		message.setBody(bytes);
 		out.write(message);
 		return true;

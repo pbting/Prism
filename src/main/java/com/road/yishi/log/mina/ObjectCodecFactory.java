@@ -1,4 +1,4 @@
-package exetuor.mina;
+package com.road.yishi.log.mina;
 
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;

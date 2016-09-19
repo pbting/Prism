@@ -1,4 +1,4 @@
-package exetuor.mina;
+package com.road.yishi.log.mina;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

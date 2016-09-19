@@ -1,4 +1,4 @@
-package exetuor.mina;
+package com.road.yishi.log.mina;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -10,11 +10,14 @@ import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
 import com.road.yishi.log.Log;
+import com.road.yishi.log.mina.cmd.core.CmdMgr;
+import com.road.yishi.log.mina.cmd.server.ServerRecivePackage;
 
 public class MinaServer {
 
 	public static void main(String[] args) {
 		try {
+			CmdMgr.init(ServerRecivePackage.class);
 			NioSocketAcceptor socketAcceptor = new NioSocketAcceptor(Runtime.getRuntime().availableProcessors()*2+1);
 			SocketSessionConfig config = socketAcceptor.getSessionConfig();
 			config.setBothIdleTime(10);

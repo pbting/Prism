@@ -1,4 +1,4 @@
-package exetuor.mina;
+package com.road.yishi.log.mina;
 
 import java.io.Serializable;
 
@@ -30,7 +30,7 @@ public class KryoMessage implements Serializable{
 	public int getLength() {
 		return length;
 	}
-	public void setLength(short length) {
+	public void setLength(int length) {
 		this.length = length;
 	}
 	
@@ -53,4 +53,12 @@ public class KryoMessage implements Serializable{
 		this.protocol = ioBuffer.getInt();
 	}
 	
+	public static <T extends Serializable> KryoMessage buildKryoMessage(int protocol,T t,Class<T> clazz){
+		KryoMessage kryoMessage = new KryoMessage();
+		byte[] body = KryoUtil.serialization(t, clazz).getBytes();
+		kryoMessage.setProtocol(protocol);
+		kryoMessage.setLength(body.length);
+		kryoMessage.setBody(body);
+		return kryoMessage;
+	}
 }
