@@ -3,6 +3,8 @@ package com.road.yishi.log.mina;
 import java.io.Serializable;
 
 import org.apache.mina.core.buffer.IoBuffer;
+
+import com.road.yishi.log.util.ZLibUtils;
 /**
  * 
  * <pre>
@@ -60,5 +62,18 @@ public class KryoMessage implements Serializable{
 		kryoMessage.setLength(body.length);
 		kryoMessage.setBody(body);
 		return kryoMessage;
+	}
+	public static <T extends Serializable> KryoMessage buildKryoMessage(int protocol,T t,Class<T> clazz,boolean isZlib){
+		if(!isZlib){
+			return buildKryoMessage(protocol, t, clazz);
+		}else{
+			KryoMessage kryoMessage = new KryoMessage();
+			byte[] body = KryoUtil.serialization(t, clazz).getBytes();
+			body = ZLibUtils.compress(body);
+			kryoMessage.setProtocol(protocol);
+			kryoMessage.setLength(body.length);
+			kryoMessage.setBody(body);
+			return kryoMessage;
+		}
 	}
 }

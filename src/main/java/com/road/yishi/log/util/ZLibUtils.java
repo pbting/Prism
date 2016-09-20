@@ -1,4 +1,4 @@
-package com.road.yishi.log.bank;
+package com.road.yishi.log.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
