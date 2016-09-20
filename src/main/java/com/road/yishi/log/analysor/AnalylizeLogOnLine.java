@@ -8,7 +8,7 @@ import com.road.yishi.log.analyze.LogMetaInfoOnLine;
 import com.road.yishi.log.core.LogDetailInfo;
 import com.road.yishi.log.core.LogMetaFactory;
 import com.road.yishi.log.core.LogMetaInfo;
-import com.road.yishi.log.handler.TopicMap;
+import com.road.yishi.log.handler.TopicMapper;
 
 /**
  * 
@@ -17,13 +17,13 @@ import com.road.yishi.log.handler.TopicMap;
  * </pre>
  */
 //@TopicHandler(fileName="dir",topic="")
-public class AnalylizeLogOnLine extends TopicMap<LogMetaInfo,LogDetailInfo>{
+public class AnalylizeLogOnLine extends TopicMapper<LogMetaInfo,LogDetailInfo>{
 
 	/**
 	 * 当前文件映射到内存中已经解析出一行一行的信息，解析完之后，需要放入日志上下文处理
 	 * @param line
 	 * @param logContext
-	 * @see com.road.yishi.log.analysor.TopicMap#map(java.lang.Object, java.util.Map)
+	 * @see com.road.yishi.log.analysor.TopicMapper#map(java.lang.Object, java.util.Map)
 	 */
 	private String dateLine = "";
 	private String detailLine = "";

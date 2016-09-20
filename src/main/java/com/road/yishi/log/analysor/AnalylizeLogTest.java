@@ -8,10 +8,10 @@ import java.util.UUID;
 import com.road.yishi.log.core.LogDetailInfo;
 import com.road.yishi.log.core.LogMetaFactory;
 import com.road.yishi.log.core.LogMetaInfo;
-import com.road.yishi.log.handler.TopicMap;
+import com.road.yishi.log.handler.TopicMapper;
 
 //@TopicHandler(fileName="",topic="")
-public class AnalylizeLogTest extends TopicMap<LogMetaInfo,LogDetailInfo>{
+public class AnalylizeLogTest extends TopicMapper<LogMetaInfo,LogDetailInfo>{
 
 	private StringBuffer content = new StringBuffer();
 	private LogMetaInfo LogMetaInfo = null ;

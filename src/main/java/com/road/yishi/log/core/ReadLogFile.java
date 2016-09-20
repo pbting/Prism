@@ -22,7 +22,7 @@ public class ReadLogFile implements ReadFile{
 	 */
 	public static int readAnalysis(AnalylizeLogInter analylize,FileChannel fileChannel, long fileSize, int lastReadIndex) throws IOException {
 		synchronized (fileChannel) {
-			long size = fileSize > BUFFER_SIZE ? BUFFER_SIZE : fileSize;// 设置缓冲区的大小
+			long size = fileSize > BLOCKING_SIZE ? BLOCKING_SIZE : fileSize;// 设置缓冲区的大小
 			boolean isQuit = true;
 			while (isQuit) {
 				// 1、计算剩下读取的字节,表示已经读取到文件的结尾处了

@@ -10,11 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.road.yishi.log.Log;
-import com.road.yishi.log.cluster.ClusterMgr;
 import com.road.yishi.log.handler.AnalylizeLogInter;
-import com.road.yishi.log.mgr.ConfigMgr;
-import com.road.yishi.log.util.FileUtil;
-import com.road.yishi.log.util.HttpUtil;
 
 public class MappedBufferReadFile implements ReadFile {
 
@@ -37,11 +33,11 @@ public class MappedBufferReadFile implements ReadFile {
 			FileChannel fileChannel = null ;
 			try {
 				fileChannel = new RandomAccessFile(file, "rw").getChannel();
-				long size = fileSize > BUFFER_SIZE ? BUFFER_SIZE : fileSize;// 设置缓冲区的大小
+				long size = fileSize > BLOCKING_SIZE ? BLOCKING_SIZE : fileSize;// 设置缓冲区的大小
 				boolean isQuit = true;
 				while (isQuit) {
 					if (fileSize - lastReadIndex <= size) {
-						size = fileSize - lastReadIndex;
+						size = fileSize - lastReadIndex;//must resize 
 						isQuit = false;
 					}
 	
@@ -55,7 +51,10 @@ public class MappedBufferReadFile implements ReadFile {
 					for (int i = 0; i < size; i++) {
 						dst[i] = inputBuffer.get(i);
 					}
-					
+					/**
+					 * 这里会有一个问题：当初始位置为0时，该文件大小超过64M,这个时候内存数据堆积过大，可能会很吃内存。
+					 * 这里需要处理。
+					 */
 					messageBuilder.append(new String(dst,charset));
 					lastReadIndex += size;
 				}
@@ -76,49 +75,8 @@ public class MappedBufferReadFile implements ReadFile {
 		return copyLastReadIndex;
 	}
 	private static <K, V> void handler(AnalylizeLogInter<K, V> analysor, String topic,String fileName,StringBuilder messageBuilder) {
-		String role = ClusterMgr.getClusterContiner().getRole();
-		if("master".equals(role)){
-			ConsumerExecutor.consumer(topic,analysor.analylize(messageBuilder.toString()));
-		}else if("slave".equals(role)){
-			String transMode = ConfigMgr.getTransMode();
-			switch (transMode) {
-			case Paramter.TRANS_MODE_UPLOAD://slave 向 master 定点上传 日志数据
-				{
-					byte[] messageBytes = messageBuilder.toString().getBytes(Charset.forName("utf-8"));
-					if(messageBytes.length<=0){
-						return ;
-					}
-					String data = ConfigMgr.getDataPath();
-					String dataDirs = data + File.separator + topic;
-					String fName = fileName.substring(fileName.lastIndexOf("/")+1);
-					File file = new File(dataDirs, fName);
-					try {
-						FileUtil.writeWithTransferTo(file,messageBytes);
-					} catch (IOException e) {
-						Log.error("["+MappedBufferReadFile.className+"] 日志数据写 写出现异常", e);
-					}
-					//写完后将该文件上传给master
-					String masterUploadUrl = ClusterMgr.getClusterContiner().getMasterUrl()+"/" +Paramter.URL_fileUpload;
-					int count = ConfigMgr.getReUploadFail();
-					while(!HttpUtil.upload(file.getAbsolutePath(),masterUploadUrl)&&(count--)>0);
-					if(count>0){
-						try {
-							file.deleteOnExit();
-						} catch (Exception e) {
-							Log.error("topic:"+topic+";file name:"+file.getName()+"上传master success,删除本地失败", e);
-						}
-					}else{
-						Log.error("topic:"+topic+";file name:"+file.getName()+"上传master 失败,");
-					}
-				}
-				break;
-			case Paramter.TRANS_MODE_POST:
-				{
-					ConsumerExecutor.forward(topic,fileName,messageBuilder);
-				}
-				break;
-			}
-		}
+		
+		ConsumerExecutor.consumer(topic,analysor.analylize(messageBuilder.toString()));
 	}
 	
 	/**
@@ -132,3 +90,51 @@ public class MappedBufferReadFile implements ReadFile {
 		
 	}
 }
+
+//		String role = ClusterMgr.getClusterContiner().getRole();
+//		if(Paramter.ROLE_MASTER.equals(role)){
+//		}else if(Paramter.ROLE_SLAVE.equals(role)){
+//			String transMode = ConfigMgr.getTransMode();
+//			switch (transMode) {
+//			case Paramter.TRANS_MODE_UPLOAD://slave 向 master 定点上传 日志数据
+//				{
+//					byte[] messageBytes = messageBuilder.toString().getBytes(Charset.forName("utf-8"));
+//					if(messageBytes.length<=0){
+//						return ;
+//					}
+//					String data = ConfigMgr.getDataPath();
+//					String dataDirs = data + File.separator + topic;
+//					String fName = fileName.substring(fileName.lastIndexOf("/")+1);
+//					File file = new File(dataDirs, fName);
+//					try {
+//						FileUtil.writeWithTransferTo(file,messageBytes);
+//					} catch (IOException e) {
+//						Log.error("["+MappedBufferReadFile.className+"] 日志数据写 写出现异常", e);
+//					}
+//					//写完后将该文件上传给master
+//					String masterUploadUrl = ClusterMgr.getClusterContiner().getMasterUrl()+"/" +Paramter.URL_fileUpload;
+//					int count = ConfigMgr.getReUploadFail();
+//					while(!HttpUtil.upload(file.getAbsolutePath(),masterUploadUrl)&&(count--)>0);
+//					if(count>0){
+//						try {
+//							file.deleteOnExit();
+//						} catch (Exception e) {
+//							Log.error("topic:"+topic+";file name:"+file.getName()+"上传master success,删除本地失败", e);
+//						}
+//					}else{
+//						Log.error("topic:"+topic+";file name:"+file.getName()+"上传master 失败,");
+//					}
+//				}
+//				break;
+//			case Paramter.TRANS_MODE_POST:
+//				{
+//					ConsumerExecutor.forward(topic,fileName,messageBuilder);
+//				}
+//				break;
+//			case Paramter.TRANS_MODE_TCP://基于tcp/ip 协议进行消息传递
+//				{
+//					
+//				}
+//				break;
+//			}
+//		}

@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,6 +21,8 @@ import org.dom4j.Element;
 import com.road.yishi.log.Log;
 import com.road.yishi.log.analysor.anotation.TopicHandler;
 import com.road.yishi.log.analysor.anotation.TopicReduce;
+import com.road.yishi.log.cluster.ClusterMgr;
+import com.road.yishi.log.core.Paramter;
 import com.road.yishi.log.handler.AnalylizeLogInter;
 import com.road.yishi.log.handler.Reducer;
 import com.road.yishi.log.util.ClasspathPackageScanner;
@@ -35,21 +38,37 @@ public class TopicHandlerMappingMgr {
 	private static final Map<String,String> topicDirMapping = new ConcurrentHashMap<String, String>();
 	private static String[] monitorPath = null ;
 	public static void init(String path){
-		if(!StringUtil.isEmpty(path)){
-			if(path.endsWith(".xml")){
-				try {
-					Document document = DocumentHelper.parseText(IOUtils.toString(new FileReader(path)));
-					Element rootElement = document.getRootElement();
-					//1、
-					handerMapping(rootElement);
-					//2、
-					reduceMapping(rootElement);
-					//3
-					initTopicDir(topicDirMapping.values());
-				} catch (Exception e) {
-					Log.error("", e);
+		String[] paths = ConfigMgr.getMonitorDir().split(";");
+		setMonitorPaths(paths);
+		
+		String role = ClusterMgr.getClusterContiner().getRole();
+		/**
+		 * the role of slave must resolve the topic_handler.xml
+		 */
+		if(Paramter.ROLE_SLAVE.equals(role)){
+			if(!StringUtil.isEmpty(path)){
+				if(path.endsWith(".xml")){
+					Log.debug("[ slave ] start resolve the topic_hander.xml file.");
+					try {
+						Document document = DocumentHelper.parseText(IOUtils.toString(new FileReader(path)));
+						Element rootElement = document.getRootElement();
+						//1、
+						handerMapping(rootElement);
+						//2、
+						reduceMapping(rootElement);
+						//3
+						initTopicDir(topicDirMapping.values());
+					} catch (Exception e) {
+						Log.error("", e);
+					}
 				}
 			}
+		}else if(Paramter.ROLE_MASTER.equals(role)){
+			Log.debug("[ master ] start init the TopicDir.");
+			//the role master must know all of the topics then store message is very usefully
+			initTopicDir(Arrays.asList(ConfigMgr.getTopics()));
+		}else{
+			Log.error("[ TopicHandlerMappingMgr ] init not fount the role name.please check the property 'role' of config.properties file .");
 		}
 	}
 

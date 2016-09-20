@@ -7,9 +7,9 @@ import java.util.Map;
 import com.road.yishi.log.core.LogDetailInfo;
 import com.road.yishi.log.core.LogMetaFactory;
 import com.road.yishi.log.core.LogMetaInfo;
-import com.road.yishi.log.handler.TopicMap;
+import com.road.yishi.log.handler.TopicMapper;
 
-public class AnalylizLogLocalMapper extends TopicMap<LogMetaInfo,LogDetailInfo> {
+public class AnalylizLogLocalMapper extends TopicMapper<LogMetaInfo,LogDetailInfo> {
 
 	private StringBuffer logContent = new StringBuffer();
 	private LogMetaInfo logMetaInfo = null ;

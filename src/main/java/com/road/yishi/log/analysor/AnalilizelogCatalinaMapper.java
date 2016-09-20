@@ -9,9 +9,9 @@ import java.util.Map;
 import com.road.yishi.log.core.LogDetailInfo;
 import com.road.yishi.log.core.LogMetaFactory;
 import com.road.yishi.log.core.LogMetaInfo;
-import com.road.yishi.log.handler.TopicMap;
+import com.road.yishi.log.handler.TopicMapper;
 
-public class AnalilizelogCatalinaMapper extends TopicMap<LogMetaInfo,LogDetailInfo> {
+public class AnalilizelogCatalinaMapper extends TopicMapper<LogMetaInfo,LogDetailInfo> {
 
 	private final static List<String> keyList = Arrays.asList("WARN","INFO","SEVERE");
 	private StringBuffer logContent = new StringBuffer();
@@ -47,10 +47,22 @@ public class AnalilizelogCatalinaMapper extends TopicMap<LogMetaInfo,LogDetailIn
 				return ;
 			}
 			
-			if(errorLine!=null&&errorLine.length()>0)
+			if(errorLine!=null&&errorLine.length()>0){
 				logContent.append(line.trim()+"</ br>");
+			}
 		}
 	}
+	/**
+	 * 
+	 * <pre>
+	 * 	自己处理combiner 的过程
+	 * </pre>
+	 *
+	 * @param logContext
+	 * @param errorLine
+	 * @param secondLine
+	 * @param logContent
+	 */
 	private void handler(Map<LogMetaInfo, List<LogDetailInfo>> logContext,String errorLine,String secondLine,StringBuffer logContent) {
 		if(errorLine.length()<=0 || secondLine.length()<=0||logContent.length() <=0)
 			return ;

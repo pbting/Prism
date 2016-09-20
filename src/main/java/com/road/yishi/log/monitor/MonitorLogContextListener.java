@@ -1,13 +1,10 @@
 package com.road.yishi.log.monitor;
 
-import java.io.IOException;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import com.road.yishi.log.Log;
 import com.road.yishi.log.bank.ShutDownHook;
 import com.road.yishi.log.cluster.ClusterMgr;
 import com.road.yishi.log.mgr.ConfigMgr;
@@ -32,23 +29,17 @@ public class MonitorLogContextListener implements ServletContextListener {
 			throw new IllegalArgumentException("监听目录不能为空");
 		}
 		
-		String[] paths = ConfigMgr.getMonitorDir().split(";");
-		try {
-			TopicListenerMgr.addListener(paths);
-		} catch (IOException e) {
-			Log.error("", e);
-		}
+		TopicListenerMgr.init();
 		
 		//4、
 		PropertyConfigurator.configure(ConfigMgr.getlog4jPath());
-		TopicHandlerMappingMgr.setMonitorPaths(paths);
-		//5、
+		//5、集群管理
+		ClusterMgr.init();
+		//6、
 		TopicHandlerMappingMgr.init(ConfigMgr.getTopicHandler());
 		
-		//6、
+		//7、
 		Runtime.getRuntime().addShutdownHook(new ShutDownHook());
 		
-		//7、集群管理
-		ClusterMgr.init();
 	}
 }

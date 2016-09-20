@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.road.yishi.log.analysor.anotation.TopicHandler;
-import com.road.yishi.log.handler.TopicMap;
+import com.road.yishi.log.handler.TopicMapper;
 
 //@TopicHandler(fileName="E:/prism/topic_3",topic="topicThree")
-public class TopicThreeMapper extends TopicMap<String,Person> {
+public class TopicThreeMapper extends TopicMapper<String,Person> {
 
 	@Override
 	public void map(String line, Map<String, List<Person>> logContext, boolean hasNextToken) {

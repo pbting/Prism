@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class TopicMap<K,V> implements AnalylizeLogInter<K,V>{
+public abstract class TopicMapper<K,V> implements AnalylizeLogInter<K,V>{
 
 	@Override
 	public final Map<K, List<V>> analylize(String srcLogInfo) {

@@ -3,11 +3,23 @@ package com.road.yishi.log.mgr;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Set;
+
+import com.road.yishi.log.Log;
 import com.road.yishi.log.monitor.ResourceListener;
 
 public class TopicListenerMgr {
 
 	private TopicListenerMgr(){}
+	
+	public static void init(){
+		
+		String[] paths = ConfigMgr.getMonitorDir().split(";");
+		try {
+			TopicListenerMgr.addListener(paths);
+		} catch (IOException e) {
+			Log.error("", e);
+		}
+	}
 	
 	/**
 	 * 

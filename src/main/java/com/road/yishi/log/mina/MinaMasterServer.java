@@ -11,14 +11,14 @@ import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
 import com.road.yishi.log.Log;
 import com.road.yishi.log.mina.cmd.core.CmdMgr;
-import com.road.yishi.log.mina.cmd.server.ServerRecivePackage;
+import com.road.yishi.log.mina.cmd.server.MasterRecivePackage;
 
-public class MinaServer {
+public class MinaMasterServer {
 
-	public static void main(String[] args) {
+	public static void init() {
 		try {
-			CmdMgr.init(ServerRecivePackage.class);
-			NioSocketAcceptor socketAcceptor = new NioSocketAcceptor(Runtime.getRuntime().availableProcessors()*2+1);
+			CmdMgr.init(MasterRecivePackage.class);
+			NioSocketAcceptor socketAcceptor = new NioSocketAcceptor(Runtime.getRuntime().availableProcessors() * 2 + 1);
 			SocketSessionConfig config = socketAcceptor.getSessionConfig();
 			config.setBothIdleTime(10);
 			config.setSendBufferSize(4096);
@@ -29,9 +29,13 @@ public class MinaServer {
 			socketAcceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new ObjectCodecFactory()));
 			socketAcceptor.getFilterChain().addLast("executor", new ExecutorFilter(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 + 1)));
 			socketAcceptor.bind(new InetSocketAddress(4404));
-			System.out.println("开始监听："+4404);
+			System.out.println("开始监听：" + 4404);
+			Log.debug("mina master server start listener on port:"+4404);
 		} catch (IOException e) {
 			Log.error("", e);
 		}
+	}
+
+	public static void main(String[] args) {
 	}
 }

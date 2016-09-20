@@ -50,10 +50,6 @@ public class ConfigMgr {
 		return properties.getProperty("monitor.path");
 	}
 	
-	public static String getTopics(){
-		return properties.getProperty("topics");
-	}
-	
 	public static String getMsgPath(){
 		return properties.getProperty("msg.path");
 	}
@@ -84,6 +80,15 @@ public class ConfigMgr {
 	public static String getDataPath(){
 		
 		return properties.getProperty("dataPath");
+	}
+	
+	public static String getMasterHost(){
+		return properties.getProperty("master_host");
+	}
+	
+	public static String[] getTopics(){
+		
+		return properties.getProperty("topics").split("[;]");
 	}
 	
 	public static int getReUploadFail(){

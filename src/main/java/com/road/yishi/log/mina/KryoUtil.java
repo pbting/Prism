@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +22,9 @@ import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.CollectionSerializer;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
 import com.esotericsoftware.kryo.serializers.MapSerializer;
+import com.road.yishi.log.core.LogDetailInfo;
+import com.road.yishi.log.core.LogMetaInfo;
+import com.road.yishi.log.mina.cmd.message.TopicMessage;
 
 public class KryoUtil {
 	public static boolean serializ2File(Object object,String filePath){
@@ -230,4 +234,19 @@ public class KryoUtil {
         Input input = new Input(bais);
         return (Set<T>) kryo.readObject(input, HashSet.class, serializer);
     }
+    public static void main(String[] args) {
+    	TopicMessage<LogMetaInfo, List<LogDetailInfo>> topicMessage = new TopicMessage<LogMetaInfo, List<LogDetailInfo>>();
+		topicMessage.setK(new LogMetaInfo(new Date().toString(), "call class name", "callMethodName"));
+		List<LogDetailInfo> list = new ArrayList<LogDetailInfo>();
+		list.add(new LogDetailInfo(new Date().toString(), "log infor_"+System.currentTimeMillis()));
+		list.add(new LogDetailInfo(new Date().toString(), "log infor_"+System.currentTimeMillis()));
+		list.add(new LogDetailInfo(new Date().toString(), "log infor_"+System.currentTimeMillis()));
+		list.add(new LogDetailInfo(new Date().toString(), "log infor_"+System.currentTimeMillis()));
+		topicMessage.setV(list);
+		topicMessage.setTopic("topicName");
+		String msg = KryoUtil.serialization(topicMessage, TopicMessage.class);
+		TopicMessage<LogMetaInfo, List<LogDetailInfo>> tmp = KryoUtil.deserialization(msg, TopicMessage.class);
+		LogMetaInfo k = tmp.getK();
+		System.out.println(k.getCallClassName());
+	}
 }

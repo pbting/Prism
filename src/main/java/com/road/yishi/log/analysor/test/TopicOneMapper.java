@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.road.yishi.log.handler.TopicMap;
+import com.road.yishi.log.handler.TopicMapper;
 
 //@TopicHandler(fileName="",topic="topicOne")
-public class TopicOneMapper extends TopicMap<String,Person> {
+public class TopicOneMapper extends TopicMapper<String,Person> {
 
 	@Override
 	public void map(String line, Map<String, List<Person>> logContext, boolean hasNextToken) {

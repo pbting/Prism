@@ -6,6 +6,8 @@ public interface Paramter {
 	
 	public final static String TRANS_MODE_UPLOAD = "upload";
 	
+	public final static String TRANS_MODE_TCP = "tcp";
+	
 	public final static String ROLE_MASTER = "master" ;
 	
 	public final static String ROLE_SLAVE = "slave" ;

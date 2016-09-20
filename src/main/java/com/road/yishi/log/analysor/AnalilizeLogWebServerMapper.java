@@ -7,7 +7,7 @@ import java.util.Map;
 import com.road.yishi.log.core.LogDetailInfo;
 import com.road.yishi.log.core.LogMetaFactory;
 import com.road.yishi.log.core.LogMetaInfo;
-import com.road.yishi.log.handler.TopicMap;
+import com.road.yishi.log.handler.TopicMapper;
 
 /**
  * 
@@ -20,7 +20,7 @@ import com.road.yishi.log.handler.TopicMap;
  *  
  * </pre>
  */
-public class AnalilizeLogWebServerMapper extends TopicMap<LogMetaInfo, LogDetailInfo> {
+public class AnalilizeLogWebServerMapper extends TopicMapper<LogMetaInfo, LogDetailInfo> {
 
 	private StringBuffer logContent = new StringBuffer();
 	private String errorLine ="";
