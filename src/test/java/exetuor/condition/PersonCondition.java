@@ -1,18 +1,17 @@
 package exetuor.condition;
 
-public class PersonCondition<Person,V> extends BaseCondition<Person,V> {
+public abstract class PersonCondition<Person,V> extends BaseCondition<Person,V> {
 
 	public PersonCondition(Person observiable, V v) {
 		super(observiable, v);
 	}
 
 	@Override
-	public void addEvent() {
-	}
+	public abstract void addEvent() ;
 
 	@Override
 	public boolean isFinished() {
-		return false;
+		return true;
 	}
 
 	@Override

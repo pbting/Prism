@@ -15,8 +15,6 @@ public class DefenceCondtion extends GamePlayerCondition<GamePlayer,Integer> {
 
 			@Override
 			public void onEvent(ObjectEvent<?> event) {
-				int defence = (int) event.getValue();
-				DefenceCondtion.this.setValue(defence);
 				DefenceCondtion.this.handler();
 			}
 		};

@@ -9,6 +9,7 @@ public class PersonNameCondition extends PersonCondition<Person,String> {
 	private ObjectListener<Person> objectListener ;
 	public PersonNameCondition(Person person,String name) {
 		super(person,name);
+		this.addEvent();
 	}
 
 	@Override
@@ -16,8 +17,6 @@ public class PersonNameCondition extends PersonCondition<Person,String> {
 		objectListener = new ObjectListener<Person>() {
 			@Override
 			public void onEvent(ObjectEvent<?> event) {
-				Person person = (Person) event.getSource();
-				PersonNameCondition.this.setValue((String)person.getName());
 				PersonNameCondition.this.handler();
 			}
 		};
@@ -26,7 +25,7 @@ public class PersonNameCondition extends PersonCondition<Person,String> {
 
 	@Override
 	public boolean isFinished() {
-		String name = getValue();//();
-		return name.equals("pbting");
+		
+		return this.getObserviable().getName().equals(this.getValue());
 	}
 }

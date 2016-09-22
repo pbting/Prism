@@ -1,12 +1,10 @@
 package com.road.yishi.log.mina;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -237,7 +235,13 @@ public class KryoUtil {
         return (Set<T>) kryo.readObject(input, HashSet.class, serializer);
     }
     public static void main(String[] args) {
-    	ReentrantLock lock = new ReentrantLock();
+    	kryoDemo();
+    }
+
+    
+    
+	private static void byteArrayDemo() {
+		ReentrantLock lock = new ReentrantLock();
     	byte[] bytes = new byte[365];
     	Random random = new Random();
     	int count = random.nextInt(bytes.length);
@@ -260,7 +264,7 @@ public class KryoUtil {
     	if(tmp.length>0){
     		System.out.println("is true："+((tmp[0]&0xff) > 0));
     	}
-    }
+	}
 
 	private static void kryoDemo() {
 		String base64 = "base 64 demo Today is wendesday" ;

@@ -15,8 +15,6 @@ public class AttackCondition extends GamePlayerCondition<GamePlayer,Integer> {
 
 			@Override
 			public void onEvent(ObjectEvent<?> event) {
-				int attack = (int) event.getValue();
-				setValue(attack);
 				AttackCondition.this.handler();
 			}
 		};
