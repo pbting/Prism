@@ -2,6 +2,7 @@ package com.road.yishi.log.bank.persister;
 
 import java.io.File;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -10,7 +11,6 @@ import com.road.yishi.log.bank.DataBankMgr;
 import com.road.yishi.log.bank.MD5Security;
 
 import audaque.com.pbting.cache.exception.FilePersistException;
-import audaque.com.pbting.cache.util.StringUtils;
 
 public abstract class AbstractFilePersistListener implements FilePersistListener {
 

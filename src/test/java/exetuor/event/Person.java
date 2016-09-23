@@ -2,10 +2,8 @@ package exetuor.event;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.road.yishi.log.core.event.AbstractEventObject;
 import com.road.yishi.log.core.event.ObjectEvent;
-
 import exetuor.condition.PersonAgeCondition;
 import exetuor.condition.PersonCondition;
 import exetuor.condition.PersonNameCondition;
