@@ -2,7 +2,6 @@
 <topicHandlers>
 	<mapper  class="com.road.yishi.log.analysor.AnalilizelogCatalinaMapper" fileName="{0}catalina.out" topic="catalinaOut" />
 	<reducer class="com.road.yishi.log.analysor.AnalilizelogCatalinaReducer" topic="catalinaOut"/>
-	
 	<!-- <mapper  class="com.road.yishi.log.analysor.AnalilizeLogWebServerMapper" fileName="{1}error.log" topic="webServer" />
 	<reducer class="com.road.yishi.log.analysor.AnalilizeLogWebServerReducer" topic="webServer"/> -->
 	
